@@ -1,3 +1,3 @@
-# Tromsø Haskell User Group
+# Tromsø Haskell Users Group
 
 THug life.
