@@ -22,8 +22,9 @@ bootstrap t b = docTypeHtml $ do
         meta ! httpEquiv "X-UA-Compatible" ! content "IE=edge,chrome=1"
         meta ! name "description" ! content "Thug Life Haskeller"
         meta ! name "viewport" ! content "width=device-width"
-        link ! href "/css/bootstrap.min.css" ! rel  "stylesheet" ! media "screen"
         link ! href "/favicon.ico" ! rel "icon"
+        link ! href "/css/bootstrap.min.css" ! rel "stylesheet"
+        link ! href "/custom/jumbotron.css"  ! rel "stylesheet"
         ieHacks
     body $ do
         navBar >> b
@@ -33,7 +34,7 @@ bootstrap t b = docTypeHtml $ do
 
 navBar :: Html
 navBar =
-    div ! class_ "navbar navbar-default navbar-static-top" $
+    div ! class_ "navbar navbar-inverse navbar-fixed-top" $
         div ! class_ "container" $ do
             div ! class_ "navbar-header" $ do
                 button  ! type_ "button"

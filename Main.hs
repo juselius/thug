@@ -9,7 +9,7 @@ import Views.Home
 
 main = scotty 3000 $ do
     middleware . staticPolicy $ addBase "static"
-    get "/" $ homeView
+    get "/" homeView
     get "/html" $ file "html/index.html"
 
 
