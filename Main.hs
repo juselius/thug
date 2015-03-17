@@ -5,9 +5,11 @@
 module Main where
 import Web.Scotty
 import Network.Wai.Middleware.Static
+import Views.Home
 
 main = scotty 3000 $ do
     middleware . staticPolicy $ addBase "static"
-    get "/" $ file "html/index.html"
+    get "/" $ homeView
+    get "/html" $ file "html/index.html"
 
 
