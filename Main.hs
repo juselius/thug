@@ -9,7 +9,9 @@ import Views.Home
 
 main = scotty 3000 $ do
     middleware . staticPolicy $ addBase "static"
-    get "/" homeView
+    get "/" coverView
+    get "/home" homeView
     get "/html" $ file "html/index.html"
+    get "/cover" $ file "html/cover.html"
 
 

@@ -2,8 +2,11 @@
 
 module Views.Bootstrap (
       bootstrap
+    , navbar
+    , pageFooter
     , blaze
     , detailsButton
+    , coverHead
     ) where
 
 import Prelude hiding (div, head, id, span)
@@ -21,9 +24,8 @@ import Web.Scotty (ActionM, html)
 import qualified Data.Text.Lazy as T
 
 bootstrap :: Html -> Html -> Html
-bootstrap t b = docTypeHtml $ do
+bootstrap prelude contents = docTypeHtml $ do
     head $ do
-        title t
         meta ! charset "utf-8"
         meta ! httpEquiv "X-UA-Compatible" ! content "IE=edge"
         meta ! name "viewport" ! content "width=device-width, initial-scale=1"
@@ -31,17 +33,21 @@ bootstrap t b = docTypeHtml $ do
         meta ! name "author" ! content "A.U. Thor "
         link ! href "/favicon.ico" ! rel "icon"
         link ! href "/css/bootstrap.min.css" ! rel "stylesheet"
-        link ! href "/custom/jumbotron.css" ! rel "stylesheet"
         ieHacks
+        prelude
     body $ do
-        navBar >> b
-        pageFooter
+        contents
         script ! src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" $ mempty
         script ! src "/js/bootstrap.min.js" $ mempty
         script ! src "/js/thug.js" $ mempty
 
-navBar :: Html
-navBar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
+coverHead :: Html
+coverHead = do
+    title "thug"
+    link ! href "/custom/cover.css" ! rel "stylesheet"
+
+navbar :: Html
+navbar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
     div ! class_ "container" $ do
         div ! class_ "navbar-header" $ do
             button  ! type_ "button"
@@ -54,10 +60,10 @@ navBar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
                         span ! class_ "icon-bar" $ mempty
                         span ! class_ "icon-bar" $ mempty
                         span ! class_ "icon-bar" $ mempty
-            a ! class_ "navbar-brand" ! href "#about"   $ "About"
-            a ! class_ "navbar-brand" ! href "#contact" $ "Contact"
-            a ! class_ "navbar-brand" ! href "/members" $ "Members"
-            a ! class_ "navbar-brand" ! href "/events"  $ "Events"
+            a ! class_ "navbar-brand" ! href "#about"   $ "about"
+            a ! class_ "navbar-brand" ! href "#contact" $ "contact"
+            a ! class_ "navbar-brand" ! href "/members" $ "members"
+            a ! class_ "navbar-brand" ! href "/events"  $ "events"
         div ! id "navbar"
             ! class_ "navbar-collapse collapse" $
             div ! class_ "container" $
@@ -85,7 +91,7 @@ pageFooter :: Html
 pageFooter = do
     div ! class_ "container" $ do
         hr
-        footer . p $ preEscapedToHtml ("&copy; THUG 2014" :: T.Text)
+        footer . p $ preEscapedToHtml ("&copy; thug 2014" :: T.Text)
 
 blaze :: Html -> ActionM ()
 blaze = html . T.pack . renderHtml
