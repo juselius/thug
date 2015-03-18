@@ -27,7 +27,7 @@ coverView = blaze $ bootstrap coverHead $ do
                             li $ a ! href "/join" $ "join"
                 div ! class_ "inner cover" $ do
                     h1 ! class_ "cover-heading" $ "tromsø haskell users group"
-                    p ! class_ "lead" $ "Cover is a one-page temp"
+                    p ! class_ "lead" $ "thug life hackers"
                     p ! class_ "lead" $
                         a   ! href "/home"
                             ! class_ "btn btn-lg btn-default" $ "learn more"
