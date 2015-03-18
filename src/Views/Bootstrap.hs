@@ -6,7 +6,6 @@ module Views.Bootstrap (
     , pageFooter
     , blaze
     , detailsButton
-    , coverHead
     ) where
 
 import Prelude hiding (div, head, id, span)
@@ -40,11 +39,6 @@ bootstrap prelude contents = docTypeHtml $ do
         script ! src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" $ mempty
         script ! src "/js/bootstrap.min.js" $ mempty
         script ! src "/js/thug.js" $ mempty
-
-coverHead :: Html
-coverHead = do
-    title "thug"
-    link ! href "/custom/cover.css" ! rel "stylesheet"
 
 navbar :: Html
 navbar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $

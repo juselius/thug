@@ -7,14 +7,16 @@ module Views.Home (
 
 import Prelude hiding (div, head, id)
 import Text.Blaze (customAttribute)
-import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul, (!), title)
-import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel, src,
-                                   type_)
+import Text.Blaze.Html
+import Text.Blaze.Html5 (
+    a, div, h1, h2, h3, nav, li, link, p, ul, (!), title)
+import Text.Blaze.Html5.Attributes (
+    class_, href, id, media, name, rel, src, type_)
 import Views.Bootstrap
-import Web.Scotty (ActionM)
+import Web.Scotty
 
 coverView :: ActionM()
-coverView = blaze $ bootstrap coverHead $ do
+coverView = blaze $ bootstrap headerCover $ do
     div ! class_ "site-wrapper" $
         div ! class_ "site-wrapper-inner" $
             div ! class_ "cover-container" $ do
@@ -36,7 +38,7 @@ coverView = blaze $ bootstrap coverHead $ do
                         p "thug 2014"
 
 homeView :: ActionM ()
-homeView = blaze $ bootstrap (title "thug home") $ do
+homeView = blaze $ bootstrap headerJumbo $ do
     navbar
     div ! class_ "jumbotron" $
         div ! class_ "container" $ do
@@ -57,4 +59,14 @@ homeView = blaze $ bootstrap (title "thug home") $ do
                 p "heck yes!"
                 detailsButton "#"
     pageFooter
+
+headerCover :: Html
+headerCover = do
+    title "thug"
+    link ! href "/custom/cover.css" ! rel "stylesheet"
+
+headerJumbo :: Html
+headerJumbo = do
+    title "thug"
+    link ! href "/custom/jumbotron.css" ! rel "stylesheet"
 
