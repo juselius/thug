@@ -1,57 +1,94 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Views.Bootstrap (bootstrap, blaze) where
+module Views.Bootstrap (
+      bootstrap
+    , blaze
+    , detailsButton
+    ) where
 
-import Prelude hiding (div, head, id)
+import Prelude hiding (div, head, id, span)
 import Data.Monoid (mempty)
-import Data.Text.Lazy (toStrict)
+import Text.Blaze (dataAttribute, customAttribute, AttributeValue)
 import Text.Blaze.Html (Html, preEscapedToHtml)
-import Text.Blaze.Html.Renderer.Text (renderHtml)
-import Text.Blaze.Html5 (a, body, button, dataAttribute, div ,
-                        docTypeHtml, h1, head, li, link, meta, p, script,
-                        style, title, ul, (!))
-import Text.Blaze.Html5.Attributes (charset, class_, content, href, httpEquiv,
-                                   id, media, name, rel, src, type_)
+import Text.Blaze.Html.Renderer.Pretty (renderHtml)
+import Text.Blaze.Html5
+       (a, body, button,  div, docTypeHtml, h1, head, li, input, nav, hr,
+        link, meta, p, script, style, title, ul, (!), span, form, footer)
+import Text.Blaze.Html5.Attributes
+       (charset, class_, content, href, httpEquiv, id, media, name, rel,
+        src, type_, placeholder)
 import Web.Scotty (ActionM, html)
+import qualified Data.Text.Lazy as T
 
 bootstrap :: Html -> Html -> Html
 bootstrap t b = docTypeHtml $ do
     head $ do
         title t
         meta ! charset "utf-8"
-        meta ! httpEquiv "X-UA-Compatible" ! content "IE=edge,chrome=1"
+        meta ! httpEquiv "X-UA-Compatible" ! content "IE=edge"
+        meta ! name "viewport" ! content "width=device-width, initial-scale=1"
         meta ! name "description" ! content "Thug Life Haskeller"
-        meta ! name "viewport" ! content "width=device-width"
+        meta ! name "author" ! content "A.U. Thor "
         link ! href "/favicon.ico" ! rel "icon"
         link ! href "/css/bootstrap.min.css" ! rel "stylesheet"
-        link ! href "/custom/jumbotron.css"  ! rel "stylesheet"
+        link ! href "/custom/jumbotron.css" ! rel "stylesheet"
         ieHacks
     body $ do
         navBar >> b
-        script ! src "//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" $ mempty
-        script ! src "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" $ mempty
+        pageFooter
+        script ! src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" $ mempty
+        script ! src "/js/bootstrap.min.js" $ mempty
         script ! src "/js/thug.js" $ mempty
 
 navBar :: Html
-navBar =
-    div ! class_ "navbar navbar-inverse navbar-fixed-top" $
-        div ! class_ "container" $ do
-            div ! class_ "navbar-header" $ do
-                button  ! type_ "button"
-                        ! class_ "navbar-toggle"
-                        ! dataAttribute "toggle" "collapse"
-                        ! dataAttribute "target" ".navbar-collapse" $ do
-                            a ! class_ "navbar-brand" ! href "#" $ "λ"
-            div ! class_ "navbar-collapse collapse" $ ul
-                ! class_ "nav navbar-nav" $ do
-                    li ! class_ "active" $ a ! href "#" $ "Home"
-                    li $ a ! href "#about" $ "About"
-                    li $ a ! href "#contact" $ "Contact"
-                    li $ a ! href "/members" $ "Members"
-                    li $ a ! href "/events" $ "Events"
+navBar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
+    div ! class_ "container" $ do
+        div ! class_ "navbar-header" $ do
+            button  ! type_ "button"
+                    ! class_ "navbar-toggle"
+                    ! dataAttribute "toggle" "collapse"
+                    ! dataAttribute "target" "#navbar"
+                    ! customAttribute "aria-expanded" "false"
+                    ! customAttribute "aria-controls" "navbar" $ do
+                        span ! class_ "sr-only" $ "Toggle navigation"
+                        span ! class_ "icon-bar" $ mempty
+                        span ! class_ "icon-bar" $ mempty
+                        span ! class_ "icon-bar" $ mempty
+            a ! class_ "navbar-brand" ! href "#about"   $ "About"
+            a ! class_ "navbar-brand" ! href "#contact" $ "Contact"
+            a ! class_ "navbar-brand" ! href "/members" $ "Members"
+            a ! class_ "navbar-brand" ! href "/events"  $ "Events"
+        div ! id "navbar"
+            ! class_ "navbar-collapse collapse" $
+            div ! class_ "container" $
+                form ! class_ "navbar-form navbar-right" $ do
+                    div ! class_ "form-group" $
+                        input   ! type_ "text"
+                                ! placeholder "Email"
+                                ! class_ "form-control"
+                    div ! class_ "form-group" $
+                        input   ! type_ "password"
+                                ! placeholder "Password"
+                                ! class_ "form-control"
+                    button  ! type_ "submit"
+                            ! class_ "btn btn-success" $ "Sign in"
+
+detailsButton :: AttributeValue -> Html
+detailsButton dest = do
+  p $ a
+    ! class_ "btn btn-default"
+    ! href dest
+    ! customAttribute "role" "button" $
+        preEscapedToHtml ("View details &raquo;":: T.Text)
+
+pageFooter :: Html
+pageFooter = do
+    div ! class_ "container" $ do
+        hr
+        footer . p $ preEscapedToHtml ("&copy; THUG 2014" :: T.Text)
 
 blaze :: Html -> ActionM ()
-blaze = html . renderHtml
+blaze = html . T.pack . renderHtml
 
 ieHacks :: Html
 ieHacks = preEscapedToHtml $ unlines [
