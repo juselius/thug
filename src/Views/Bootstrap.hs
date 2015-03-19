@@ -36,7 +36,7 @@ bootstrap prelude contents = docTypeHtml $ do
         prelude
     body $ do
         contents
-        script ! src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" $ mempty
+        script ! src jqry $ mempty
         script ! src "/js/bootstrap.min.js" $ mempty
         script ! src "/js/thug.js" $ mempty
 
@@ -85,7 +85,9 @@ pageFooter :: Html
 pageFooter = do
     div ! class_ "container" $ do
         hr
-        footer . p $ preEscapedToHtml ("&copy; thug 2014" :: T.Text)
+        footer . p $  preEscapedToHtml (
+            "&copy; thug 2015. powered by haskell." :: T.Text
+            )
 
 blaze :: Html -> ActionM ()
 blaze = html . T.pack . renderHtml
@@ -98,3 +100,6 @@ ieHacks = preEscapedToHtml $ unlines [
     , "<script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"></script>"
     , "<![endif]-->"
     ]
+
+jqry :: AttributeValue
+jqry = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"
