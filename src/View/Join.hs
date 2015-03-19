@@ -14,14 +14,16 @@ import Text.Blaze.Html5 (
     button, table, tr, td)
 import Text.Blaze.Html5.Attributes (
     class_, href, id, media, name, rel, src, type_, placeholder, action, method)
-import View.Bootstrap
 import Web.Scotty
 import Network.HTTP.Types.Status
 import Data.Aeson (object, (.=))
 import qualified Data.Text as T
 
+import View.Bootstrap
+import Controller.Join
+
 joinView :: ActionM()
-joinView = blaze $ bootstrap headerBasic $ do
+joinView = blaze . bootstrap (cssStarter "join thug") $ do
     navbar
     div ! class_ "container" $
         div ! class_ "starter-template" $ do
@@ -68,7 +70,3 @@ joinForm = form ! action "join" ! method "POST" $
             td $ button ! type_ "submit"
                    ! class_ "btn btn-success" $ "Register"
 
-headerBasic :: Html
-headerBasic = do
-    title "join thug"
-    link ! href "/custom/starter-template.css" ! rel "stylesheet"

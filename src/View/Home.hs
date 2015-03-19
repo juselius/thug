@@ -16,7 +16,7 @@ import View.Bootstrap
 import Web.Scotty
 
 coverView :: ActionM()
-coverView = blaze $ bootstrap headerCover $ do
+coverView = blaze . bootstrap (cssCover "thug") $ do
     div ! class_ "site-wrapper" $
         div ! class_ "site-wrapper-inner" $
             div ! class_ "cover-container" $ do
@@ -38,7 +38,7 @@ coverView = blaze $ bootstrap headerCover $ do
                         p "thug 2014"
 
 homeView :: ActionM ()
-homeView = blaze $ bootstrap headerJumbo $ do
+homeView = blaze . bootstrap (cssJumbo "thug") $ do
     navbar
     div ! class_ "jumbotron" $
         div ! class_ "container" $ do
@@ -59,14 +59,4 @@ homeView = blaze $ bootstrap headerJumbo $ do
                 p "heck yes!"
                 detailsButton "#"
     pageFooter
-
-headerCover :: Html
-headerCover = do
-    title "thug"
-    link ! href "/custom/cover.css" ! rel "stylesheet"
-
-headerJumbo :: Html
-headerJumbo = do
-    title "thug"
-    link ! href "/custom/jumbotron.css" ! rel "stylesheet"
 

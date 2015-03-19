@@ -5,13 +5,16 @@ module View.Bootstrap (
     , navbar
     , pageFooter
     , blaze
+    , cssStarter
+    , cssCover
+    , cssJumbo
     , detailsButton
     ) where
 
 import Prelude hiding (div, head, id, span)
 import Data.Monoid (mempty)
 import Text.Blaze (dataAttribute, customAttribute, AttributeValue)
-import Text.Blaze.Html (Html, preEscapedToHtml)
+import Text.Blaze.Html (toHtml, Html, preEscapedToHtml)
 import Text.Blaze.Html.Renderer.Pretty (renderHtml)
 import Text.Blaze.Html5
        (a, body, button,  div, docTypeHtml, h1, head, li, input, nav, hr,
@@ -91,6 +94,22 @@ pageFooter = do
 
 blaze :: Html -> ActionM ()
 blaze = html . T.pack . renderHtml
+
+cssStarter :: String -> Html
+cssStarter t = do
+    title $ toHtml t
+    link ! href "/custom/starter-template.css" ! rel "stylesheet"
+
+cssCover :: String -> Html
+cssCover t = do
+    title $ toHtml t
+    link ! href "/custom/cover.css" ! rel "stylesheet"
+
+cssJumbo :: String -> Html
+cssJumbo t = do
+    title $ toHtml t
+    link ! href "/custom/jumbotron.css" ! rel "stylesheet"
+
 
 ieHacks :: Html
 ieHacks = preEscapedToHtml $ unlines [
