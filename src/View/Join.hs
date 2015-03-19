@@ -13,7 +13,7 @@ import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul,
                         (!), title, form, input, button, table, tr, td)
 import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel, src,
                                    required, type_, placeholder, action,
-                                   method, onsubmit)
+                                   method, onsubmit, onmouseover)
 import Web.Scotty
 import Network.HTTP.Types.Status
 import Data.Aeson (object, (.=))
@@ -39,7 +39,7 @@ joinForm :: Html
 joinForm = form
     ! action "join"
     ! method "POST"
-    ! onsubmit "return Thug.validateJoin(true)"
+    ! onsubmit "return Strict.Thug.validateJoin(true)"
     ! id "joinForm" $
     table ! class_ "table table-hover" $ do
         tr $ do

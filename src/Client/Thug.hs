@@ -3,6 +3,7 @@
 {-# LANGUAGE EmptyDataDecls  #-}
 
 module Thug (
+    validateJoin
   ) where
 
 import Prelude hiding (log)
@@ -20,7 +21,10 @@ instance Eventable Element
 -- main = do
 --     validateJoin
 
-validateJoin :: a -> Fay ()
+alert :: String -> Fay ()
+alert = ffi "alert(%1)"
+
+validateJoin :: a -> Fay Bool
 validateJoin _ = do
     joinForm    <- getElementById "joinForm"
     joinEmail   <- getElementById "joinEmail"
@@ -28,14 +32,15 @@ validateJoin _ = do
     joinPasswd  <- getElementById "joinPasswd"
     joinPasswd_ <- getElementById "joinPasswd_"
 
-    addEventListener joinForm "onsubmit" $ \_ -> do
-        if elementValue joinPasswd /= elementValue joinPasswd_
-            then do
-                setInnerHTML joinPasswd_ "Passwords don't match"
-                return ()
-            else
-                return ()
-    return ()
+    alert("hej")
+    return False
+
+    -- if elementValue joinPasswd /= elementValue joinPasswd_
+    --     then do
+    --         setInnerHTML joinPasswd_ "Passwords don't match"
+    --         return False
+    --     else
+    --         return True
 
 
     -- prompt <- getElementById "prompt"
@@ -101,3 +106,4 @@ elementValue = ffi "%1.value"
 
 messageData :: Event -> String
 messageData = ffi "%1.data"
+
