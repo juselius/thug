@@ -16,6 +16,12 @@ build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
+data-dir:           static
+data-files:           js/*.js
+                    , css/*.css
+                    , custom/*.css
+                    , fonts/*
+
 executable thug
   main-is:              Main.hs
   -- other-modules:
@@ -28,6 +34,7 @@ executable thug
     , blaze-html
     , blaze-markup
     , aeson
+    , http-types
 
   hs-source-dirs:       ., src
   default-language:     Haskell2010
