@@ -8,10 +8,9 @@ module View.Home (
 import Prelude hiding (div, head, id)
 import Text.Blaze (customAttribute)
 import Text.Blaze.Html
-import Text.Blaze.Html5 (
-    a, div, h1, h2, h3, nav, li, link, p, ul, (!), title)
-import Text.Blaze.Html5.Attributes (
-    class_, href, id, media, name, rel, src, type_)
+import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul, (!), title)
+import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel, src,
+                                   type_)
 import View.Bootstrap
 import Web.Scotty
 

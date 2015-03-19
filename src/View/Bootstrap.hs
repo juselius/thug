@@ -16,12 +16,12 @@ import Data.Monoid (mempty)
 import Text.Blaze (dataAttribute, customAttribute, AttributeValue)
 import Text.Blaze.Html (toHtml, Html, preEscapedToHtml)
 import Text.Blaze.Html.Renderer.Pretty (renderHtml)
-import Text.Blaze.Html5
-       (a, body, button,  div, docTypeHtml, h1, head, li, input, nav, hr,
-        link, meta, p, script, style, title, ul, (!), span, form, footer)
-import Text.Blaze.Html5.Attributes
-       (charset, class_, content, href, httpEquiv, id, media, name, rel,
-        src, type_, placeholder)
+import Text.Blaze.Html5 (a, body, button,  div, docTypeHtml, h1, head, li,
+                        input, nav, hr, link, meta, p, script, style, title,
+                        ul, (!), span, form, footer)
+import Text.Blaze.Html5.Attributes (charset, class_, content, href, httpEquiv,
+                                   id, media, name, rel, src, type_,
+                                   placeholder)
 import Web.Scotty (ActionM, html)
 import qualified Data.Text.Lazy as T
 

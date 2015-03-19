@@ -9,11 +9,10 @@ import Prelude hiding (div, head, id)
 import Data.Monoid (mempty)
 import Text.Blaze (customAttribute)
 import Text.Blaze.Html
-import Text.Blaze.Html5 (
-    a, div, h1, h2, h3, nav, li, link, p, ul, (!), title, form, input,
-    button, table, tr, td)
-import Text.Blaze.Html5.Attributes (
-    class_, href, id, media, name, rel, src, type_, placeholder, action, method)
+import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul,
+                        (!), title, form, input, button, table, tr, td)
+import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel,
+                                   src, type_, placeholder, action, method)
 import Web.Scotty
 import Network.HTTP.Types.Status
 import Data.Aeson (object, (.=))
