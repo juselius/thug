@@ -5,8 +5,8 @@
 module Main where
 import Web.Scotty
 import Network.Wai.Middleware.Static
-import Views.Home
-import Views.Join
+import View.Home
+import View.Join
 
 main = scotty 3000 $ do
     middleware . staticPolicy $ addBase "static"
