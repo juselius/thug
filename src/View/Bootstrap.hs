@@ -77,20 +77,18 @@ navbar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
                             ! class_ "btn btn-success" $ "Sign in"
 
 detailsButton :: AttributeValue -> Html
-detailsButton dest = do
-  p $ a
+detailsButton dest = p $ a
     ! class_ "btn btn-default"
     ! href dest
     ! customAttribute "role" "button" $
         preEscapedToHtml ("View details &raquo;":: T.Text)
 
 pageFooter :: Html
-pageFooter = do
-    div ! class_ "container" $ do
-        hr
-        footer . p $  preEscapedToHtml (
-            "&copy; thug 2015. powered by haskell." :: T.Text
-            )
+pageFooter = div ! class_ "container" $ do
+    hr
+    footer . p $  preEscapedToHtml (
+        "&copy; thug 2015. powered by haskell." :: T.Text
+        )
 
 blaze :: Html -> ActionM ()
 blaze = html . T.pack . renderHtml

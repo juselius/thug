@@ -15,11 +15,11 @@ import View.Bootstrap
 import Web.Scotty
 
 coverView :: ActionM()
-coverView = blaze . bootstrap (cssCover "thug") $ do
+coverView = blaze . bootstrap (cssCover "thug") $
     div ! class_ "site-wrapper" $
         div ! class_ "site-wrapper-inner" $
             div ! class_ "cover-container" $ do
-                div ! class_ "masthead clearfix" $ do
+                div ! class_ "masthead clearfix" $
                     div ! class_ "inner" $ do
                         h3 ! class_ "masthead-brand" $ "thug"
                         nav $ ul ! class_ "nav masthead-nav" $ do
