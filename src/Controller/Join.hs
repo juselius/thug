@@ -24,16 +24,16 @@ joinHandler :: ActionM()
 joinHandler = do
     fullname <- param "fullname" :: ActionM T.Text
     email    <- param "email"    :: ActionM T.Text
-    passwd1  <- param "passwd1"  :: ActionM T.Text
-    passwd2  <- param "passwd2"  :: ActionM T.Text
-    if passwd1 /= passwd2
+    passwd  <- param "passwd"  :: ActionM T.Text
+    passwd_  <- param "passwd_"  :: ActionM T.Text
+    if passwd /= passwd_
         then do
             page $ p "Passwords don't match!"
             status badRequest400
         else page $ do
             p $ toHtml fullname
             p $ toHtml email
-            p $ toHtml . take (T.length passwd1) $ cycle ("*" :: String)
+            p $ toHtml . take (T.length passwd) $ cycle ("*" :: String)
         where
             page x =
                 blaze . bootstrap (cssStarter "register") $ do

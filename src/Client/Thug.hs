@@ -16,14 +16,27 @@ class Eventable a
 instance Eventable WebSocket
 instance Eventable Element
 
-main :: Fay ()
-main = do
-    foo <- getElementById "foo"
+-- main :: Fay ()
+-- main = do
+--     validateJoin
 
-    addEventListener foo "onmouseover" $ \_ -> do
-        setInnerHTML foo "foo"
-    addEventListener foo "onmouseout" $ \_ -> do
-        setInnerHTML foo "bar"
+validateJoin :: a -> Fay ()
+validateJoin _ = do
+    joinForm    <- getElementById "joinForm"
+    joinEmail   <- getElementById "joinEmail"
+    joinName    <- getElementById "joinName"
+    joinPasswd  <- getElementById "joinPasswd"
+    joinPasswd_ <- getElementById "joinPasswd_"
+
+    addEventListener joinForm "onsubmit" $ \_ -> do
+        if elementValue joinPasswd /= elementValue joinPasswd_
+            then do
+                setInnerHTML joinPasswd_ "Passwords don't match"
+                return ()
+            else
+                return ()
+    return ()
+
 
     -- prompt <- getElementById "prompt"
     -- messages <- getElementById "repl"
