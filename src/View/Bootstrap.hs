@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Views.Bootstrap (
+module View.Bootstrap (
       bootstrap
     , navbar
     , pageFooter

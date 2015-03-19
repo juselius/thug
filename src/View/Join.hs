@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Views.Join (
+module View.Join (
       joinView
     , joinHandler
     ) where
@@ -14,7 +14,7 @@ import Text.Blaze.Html5 (
     button, table, tr, td)
 import Text.Blaze.Html5.Attributes (
     class_, href, id, media, name, rel, src, type_, placeholder, action, method)
-import Views.Bootstrap
+import View.Bootstrap
 import Web.Scotty
 import Network.HTTP.Types.Status
 import Data.Aeson (object, (.=))
@@ -67,34 +67,6 @@ joinForm = form ! action "join" ! method "POST" $
             td mempty
             td $ button ! type_ "submit"
                    ! class_ "btn btn-success" $ "Register"
-
-joinHandler :: ActionM()
-joinHandler = do
-    fullname <- param "fullname" :: ActionM T.Text
-    email    <- param "email"    :: ActionM T.Text
-    passwd1  <- param "passwd1"  :: ActionM T.Text
-    passwd2  <- param "passwd2"  :: ActionM T.Text
-    -- registered <- liftIO (registerInterest emailAddress)
-    -- case registered of
-    --     Just errorMessage -> do
-    --         json $ object [ "error" .= errorMessage ]
-    --         status internalServerError500
-    --     Nothing -> do
-    -- json $ object [ "ok" .= ("ok" :: String) ]
-    if passwd1 /= passwd2
-        then do
-            page $ p "Passwords don't match!"
-            status badRequest400
-        else page $ do
-            p $ toHtml fullname
-            p $ toHtml email
-            p $ toHtml . take (T.length passwd1) $ cycle ("*" :: String)
-        where
-            page x =
-                blaze $ bootstrap headerBasic $ do
-                    navbar
-                    div ! class_ "container" $
-                        div ! class_ "starter-template" $ x
 
 headerBasic :: Html
 headerBasic = do

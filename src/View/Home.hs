@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Views.Home (
+module View.Home (
       homeView
     , coverView
     ) where
@@ -12,7 +12,7 @@ import Text.Blaze.Html5 (
     a, div, h1, h2, h3, nav, li, link, p, ul, (!), title)
 import Text.Blaze.Html5.Attributes (
     class_, href, id, media, name, rel, src, type_)
-import Views.Bootstrap
+import View.Bootstrap
 import Web.Scotty
 
 coverView :: ActionM()
