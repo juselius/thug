@@ -77,8 +77,9 @@ joinForm = form
                           ! required "true"
                           ! id "joinPasswd_"
                           ! class_ "form-control"
+                tr. td $ div ! id "errorBox" $ mempty
         tr $ do
-            td $ div ! id "msgBox" $ mempty
+            td mempty
             td $ button
                 ! type_ "submit"
                 ! class_ "btn btn-success" $ "Register"

@@ -28,12 +28,14 @@ validateJoin _ = do
 
     pwOk <- validatePasswd jPasswd jPasswd_ errorBox
     userOk <- validateUser jName jEmail errorBox
-    return $ pwOk && userOk
+    if pwOk && userOk
+        then return True
+        else return False
 
 validatePasswd :: Element -> Element -> Element -> Fay Bool
 validatePasswd e0 e1 msgBox = do
     let p0 = elementValue e0
-    let p1 = elementValue
+    let p1 = elementValue e1
     sane p0 p1 msgBox
     where
         sane p0 p1 msgBox
@@ -46,11 +48,13 @@ validatePasswd e0 e1 msgBox = do
             | otherwise = return True
 
 validateUser ::  Element -> Element -> Element -> Fay Bool
-validateUser u e = do
+validateUser u e msgBox = do
     let user = elementValue u
     let email = elementValue e
+    setInnerHTML msgBox $ "<b>socket!</b>"
     conn <- newWebSocket "ws://localhost:8080"
-    conn `send`
+    return False
+
 
     -- addEventListener connectionToSanta "onopen" $ \_ -> do
     --     setDisabled prompt False
