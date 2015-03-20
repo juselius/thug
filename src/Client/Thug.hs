@@ -3,8 +3,8 @@
 {-# LANGUAGE EmptyDataDecls  #-}
 
 module Thug (
-    validateJoin
-  ) where
+      validateJoin
+    ) where
 
 import Prelude hiding (log)
 import FFI
@@ -17,13 +17,6 @@ class Eventable a
 instance Eventable WebSocket
 instance Eventable Element
 
--- main :: Fay ()
--- main = do
---     validateJoin
-
-alert :: String -> Fay ()
-alert = ffi "alert(%1)"
-
 validateJoin :: a -> Fay Bool
 validateJoin _ = do
     joinForm    <- getElementById "joinForm"
@@ -31,17 +24,16 @@ validateJoin _ = do
     joinName    <- getElementById "joinName"
     joinPasswd  <- getElementById "joinPasswd"
     joinPasswd_ <- getElementById "joinPasswd_"
+    pwWarn <- getElementById "passwordWarning"
+    let p0 = elementValue joinPasswd
+    let p1 = elementValue joinPasswd_
 
-    alert("hej")
-    return False
-
-    -- if elementValue joinPasswd /= elementValue joinPasswd_
-    --     then do
-    --         setInnerHTML joinPasswd_ "Passwords don't match"
-    --         return False
-    --     else
-    --         return True
-
+    if  p0 /= p1
+        then do
+            setInnerHTML pwWarn $ "<b>Passwords don't match!</b>"
+            return False
+        else
+            return True
 
     -- prompt <- getElementById "prompt"
     -- messages <- getElementById "repl"
@@ -106,4 +98,7 @@ elementValue = ffi "%1.value"
 
 messageData :: Event -> String
 messageData = ffi "%1.data"
+
+alert :: String -> Fay ()
+alert = ffi "alert(%1)"
 

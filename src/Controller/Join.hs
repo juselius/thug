@@ -22,18 +22,19 @@ import View.Bootstrap
 
 joinHandler :: ActionM()
 joinHandler = do
-    fullname <- param "fullname" :: ActionM T.Text
-    email    <- param "email"    :: ActionM T.Text
-    passwd  <- param "passwd"  :: ActionM T.Text
-    passwd_  <- param "passwd_"  :: ActionM T.Text
+    fullname <- param "fullname" :: ActionM String
+    email    <- param "email"    :: ActionM String
+    passwd  <- param "passwd"  :: ActionM String
+    passwd_  <- param "passwd_"  :: ActionM String
     if passwd /= passwd_
         then do
             page $ p "Passwords don't match!"
             status badRequest400
         else page $ do
+            h2 . toHtml $ "Welcome thug " ++ fullname
             p $ toHtml fullname
             p $ toHtml email
-            p $ toHtml . take (T.length passwd) $ cycle ("*" :: String)
+            p $ toHtml . take (length passwd) $ cycle ("*" :: String)
         where
             page x =
                 blaze . bootstrap (cssStarter "register") $ do

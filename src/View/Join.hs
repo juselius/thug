@@ -39,7 +39,7 @@ joinForm :: Html
 joinForm = form
     ! action "join"
     ! method "POST"
-    ! onsubmit "return Strict.Thug.validateJoin(true)"
+    ! onsubmit "return Strict.Thug.validateJoin(true).value"
     ! id "joinForm" $
     table ! class_ "table table-hover" $ do
         tr $ do
@@ -48,7 +48,7 @@ joinForm = form
                 input ! type_ "text"
                       ! placeholder "Name"
                       ! name "fullname"
-                      ! required "fullname"
+                      ! required "true"
                       ! id "joinName"
                       ! class_ "form-control"
         tr $ do
@@ -57,25 +57,26 @@ joinForm = form
                 input ! type_ "email"
                       ! placeholder "Email"
                       ! name "email"
-                      ! required "email"
+                      ! required "true"
                       ! id "joinEmail"
                       ! class_ "form-control"
         tr $ do
             td "password"
             td $ table ! class_ "table-condensed" $ do
+                tr . td $ div ! id "passwordWarning" $ mempty
                 tr . td $ div ! class_ "form-group" $
                     input ! type_ "password"
                           ! placeholder "Password"
                           ! name "passwd"
-                          ! required "passwd"
-                          ! id "joinPass"
+                          ! required "true"
+                          ! id "joinPasswd"
                           ! class_ "form-control"
                 tr . td $ div ! class_ "form-group" $
                     input ! type_ "password"
                           ! placeholder "Verify Password"
                           ! name "passwd_"
-                          ! required "passwd_"
-                          ! id "joinPass_"
+                          ! required "true"
+                          ! id "joinPasswd_"
                           ! class_ "form-control"
         tr $ do
             td mempty
