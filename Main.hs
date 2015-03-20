@@ -5,16 +5,29 @@
 module Main where
 import Web.Scotty
 import Network.Wai.Middleware.Static
+import Network.WebSockets
+import Control.Concurrent
+import Control.Monad
+
 import View.Home
 import View.Join
+import Model.Members
 
-main = scotty 3000 $ do
-    middleware . staticPolicy $ addBase "static"
-    get "/" coverView
-    get "/home" homeView
-    get "/join" joinView
-    post "/join" joinHandler
-    get "/html" $ file "html/index.html"
-    get "/cover" $ file "html/cover.html"
+main = do
+    migrateDb
+    void . forkIO $ runServer "127.0.0.1" 8080 wsHandler
+    scotty 3000 $ do
+        middleware . staticPolicy $ addBase "static"
+        get "/" coverView
+        get "/home" homeView
+        get "/join" joinView
+        post "/join" joinHandler
+        get "/html" $ file "html/index.html"
+        get "/cover" $ file "html/cover.html"
 
+-- wsApp :: IO ()
+wsHandler client = do
+    conn <- acceptRequest client
+    msg <- receiveDataMessage conn
+    print msg
 
