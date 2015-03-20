@@ -13,7 +13,7 @@ import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul,
                         (!), title, form, input, button, table, tr, td)
 import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel, src,
                                    required, type_, placeholder, action,
-                                   method, onsubmit, onmouseover)
+                                   method, onsubmit, onclick)
 import Web.Scotty
 import Network.HTTP.Types.Status
 import Data.Aeson (object, (.=))
@@ -63,7 +63,6 @@ joinForm = form
         tr $ do
             td "password"
             td $ table ! class_ "table-condensed" $ do
-                tr . td $ div ! id "passwordWarning" $ mempty
                 tr . td $ div ! class_ "form-group" $
                     input ! type_ "password"
                           ! placeholder "Password"
@@ -79,7 +78,8 @@ joinForm = form
                           ! id "joinPasswd_"
                           ! class_ "form-control"
         tr $ do
-            td mempty
-            td $ button ! type_ "submit"
-                   ! class_ "btn btn-success" $ "Register"
+            td $ div ! id "msgBox" $ mempty
+            td $ button
+                ! type_ "submit"
+                ! class_ "btn btn-success" $ "Register"
 

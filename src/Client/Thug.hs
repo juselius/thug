@@ -19,25 +19,38 @@ instance Eventable Element
 
 validateJoin :: a -> Fay Bool
 validateJoin _ = do
-    joinForm    <- getElementById "joinForm"
-    joinEmail   <- getElementById "joinEmail"
-    joinName    <- getElementById "joinName"
-    joinPasswd  <- getElementById "joinPasswd"
-    joinPasswd_ <- getElementById "joinPasswd_"
-    pwWarn <- getElementById "passwordWarning"
-    let p0 = elementValue joinPasswd
-    let p1 = elementValue joinPasswd_
+    jForm    <- getElementById "joinForm"
+    jEmail   <- getElementById "joinEmail"
+    jName    <- getElementById "joinName"
+    jPasswd  <- getElementById "joinPasswd"
+    jPasswd_ <- getElementById "joinPasswd_"
+    errorBox <- getElementById "errorBox"
 
-    if  p0 /= p1
-        then do
-            setInnerHTML pwWarn $ "<b>Passwords don't match!</b>"
-            return False
-        else
-            return True
+    pwOk <- validatePasswd jPasswd jPasswd_ errorBox
+    userOk <- validateUser jName jEmail errorBox
+    return $ pwOk && userOk
 
-    -- prompt <- getElementById "prompt"
-    -- messages <- getElementById "repl"
-    -- connectionToSanta <- newWebSocket "ws://localhost:8080"
+validatePasswd :: Element -> Element -> Element -> Fay Bool
+validatePasswd e0 e1 msgBox = do
+    let p0 = elementValue e0
+    let p1 = elementValue
+    sane p0 p1 msgBox
+    where
+        sane p0 p1 msgBox
+            | p0 /= p1 = do
+                setInnerHTML msgBox $ "<b>Passwords don't match!</b>"
+                return False
+            | length p0 < 8 = do
+                setInnerHTML msgBox $ "<b>Password is too short!</b>"
+                return False
+            | otherwise = return True
+
+validateUser ::  Element -> Element -> Element -> Fay Bool
+validateUser u e = do
+    let user = elementValue u
+    let email = elementValue e
+    conn <- newWebSocket "ws://localhost:8080"
+    conn `send`
 
     -- addEventListener connectionToSanta "onopen" $ \_ -> do
     --     setDisabled prompt False
