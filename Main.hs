@@ -8,6 +8,7 @@ import Network.Wai.Middleware.Static
 import Network.WebSockets
 import Control.Concurrent
 import Control.Monad
+import Data.Text
 
 import View.Home
 import View.Join
@@ -25,9 +26,9 @@ main = do
         get "/html" $ file "html/index.html"
         get "/cover" $ file "html/cover.html"
 
--- wsApp :: IO ()
+wsHandler :: ServerApp
 wsHandler client = do
     conn <- acceptRequest client
-    msg <- receiveDataMessage conn
+    msg <- receiveData conn :: IO Text
     print msg
 

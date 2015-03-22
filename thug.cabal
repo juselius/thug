@@ -31,6 +31,7 @@ executable thug
     , scotty
     , wai-middleware-static
     , text
+    , bytetring
     , blaze-html
     , blaze-markup
     , aeson
