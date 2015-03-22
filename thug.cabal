@@ -40,7 +40,6 @@ executable thug
     , persistent
     , persistent-sqlite
     , persistent-template
-    , esqueleto
     , time
     , transformers
     , monad-logger
