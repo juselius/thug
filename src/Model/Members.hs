@@ -1,16 +1,22 @@
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE GADTs #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE GADTs #-}
 
 module Model.Members (
       migrateDb
+    , dbName
+    , addStaticData
     , addMember
+    , getMemberByEmail
     ) where
+import Control.Monad (void)
 import Control.Monad.IO.Class (liftIO)
--- import Control.Monad.Logger
+import Control.Monad.Logger
 import Data.Text
 import Data.Time
 import Database.Esqueleto
@@ -18,34 +24,49 @@ import Database.Persist hiding ((==.))
 import Database.Persist.Sqlite (runSqlite)
 import Database.Persist.TH
 
+type FirstName = Text
+type LastName  = Text
+type Email     = Text
+type Passwd    = Text
+
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Member
-  name Text
+  firstName Text
+  lastName Text
   email Text
   password Text
+  since UTCTime
+  Email email     -- uniqueness constraint
   deriving Show
 
 |]
 
+dbName :: FilePath
+dbName = "thug.db"
+
+db :: Text
+db = pack dbName
+
 migrateDb :: IO ()
-migrateDb = runSqlite ":memory:" $ do
-  runMigration migrateAll
+migrateDb = runSqlite db $ runMigration migrateAll
 
-addMember :: IO ()
-addMember = runSqlite ":memory:" $ do
-  member <- insert (Member "Foo bar" "foo@bar" "secret")
-  now <- liftIO getCurrentTime
-  -- insertMany
-  --   [ StatusUpdate member "Writing another blog post!" now Nothing ]
+addStaticData :: IO ()
+addStaticData = runSqlite db $ do
+    now <- liftIO getCurrentTime
+    void $ insert (Member "Marve" "Fleksnes" "marve@fleksnes.no" "secret" now)
+    void $ insertMany
+        [ Member "Jonas" "Juselius" "jonas.juselius@uit.no" "secret" now
+        , Member "Jonas" "Juselius" "jonas@juselius.com" "secret" now ]
 
-  -- sortedNames >>= mapM_ (liftIO . print)
-  -- latestUpdates >>= mapM_ (liftIO . print)
-  return ()
+getMemberByEmail :: Text -> IO (Maybe Member)
+getMemberByEmail e = runSqlite db $ do
+    member <- getBy $ Email e
+    case member of
+        Just (Entity _ x) -> return $ Just x
+        Nothing           -> return Nothing
 
-sortedNames =
-  select $
-  from $ \person -> do
-  orderBy [asc (person ^. MemberName)]
-  limit 5
-  return $ person ^. MemberName
+addMember :: FirstName -> LastName -> Email -> Passwd -> IO ()
+addMember f l e p = runSqlite db $ do
+    now <- liftIO getCurrentTime
+    void $ insert (Member f l e p now)
 
