@@ -6,10 +6,11 @@ module Main where
 import Web.Scotty
 import Network.Wai.Middleware.Static
 import Network.WebSockets
+import Data.Text
+import Data.Time
+import System.Posix.Files (fileExist)
 import Control.Concurrent
 import Control.Monad
-import Data.Text
-import System.Posix.Files (fileExist)
 
 import View.Home
 import View.Join
@@ -36,15 +37,14 @@ main = do
         post "/join" joinHandler
         get "/members" memberView
         get "/events" eventView
-        get "/html" $ file "html/index.html"
         get "/cover" $ file "html/cover.html"
 
 wsHandler :: ServerApp
 wsHandler client = do
     conn <- acceptRequest client
-    msg <- receiveDataMessage conn
-    putStrLn $ "request:" ++ show msg
-    msg' <- receiveDataMessage conn
-    putStrLn $ "   data:" ++ show msg'
-    sendTextData conn ("hello, hello thug" :: Text)
+    op <- receiveDataMessage conn
+    Text msg <- receiveDataMessage conn
+    case op of
+        Text "new thug" -> addThug conn msg
+        _ -> sendTextData conn ("invalid operation" :: Text)
 

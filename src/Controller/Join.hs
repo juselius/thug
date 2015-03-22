@@ -2,7 +2,7 @@
 
 module Controller.Join (
       joinHandler
-    , joinHandlerJson
+    , addThug
     ) where
 
 import Prelude hiding (div, head, id)
@@ -15,10 +15,13 @@ import Text.Blaze.Html5.Attributes (class_, href, id, media, name, rel, src,
                                    type_, placeholder, action, method)
 import Web.Scotty
 import Network.HTTP.Types.Status
-import Data.Aeson (object, (.=))
+import Data.Aeson
 import qualified Data.Text as T
+import qualified Data.ByteString.Lazy as BL
+import Network.WebSockets
 
 import View.Bootstrap
+import Model.Thug
 
 joinHandler :: ActionM()
 joinHandler = do
@@ -44,13 +47,13 @@ joinHandler = do
                     div ! class_ "container" $
                         div ! class_ "starter-template" $ x
 
-joinHandlerJson :: ActionM()
-joinHandlerJson =
-    -- join <- liftIO (registerInterest email)
-    -- case registered of
-        -- Just errorMessage -> do
-            -- json $ object [ "error" .= errorMessage ]
-            -- status internalServerError500
-        -- Nothing -> do
-    json $ object [ "ok" .= ("ok" :: String) ]
+addThug :: Connection -> BL.ByteString -> IO ()
+addThug conn msg = do
+    let Just usr = decode msg :: Maybe Member
+    ok <- hasMember usr
+    if ok
+        then sendTextData conn ("user exists" :: T.Text)
+        else do
+            addMember usr
+            sendTextData conn ("ok" :: T.Text)
 

@@ -23,7 +23,7 @@ class Eventable a
 instance Eventable WebSocket
 instance Eventable Element
 
-validateJoin :: a -> Fay Bool
+validateJoin :: a -> Fay ()
 validateJoin _ = do
     jForm       <- getElementById "joinForm"
     errorBox    <- getElementById "errorBox"
@@ -42,21 +42,9 @@ validateJoin _ = do
         }
 
     pwOk <- validatePasswd jPasswd jPasswd_ errorBox
-    registerUser usr errorBox
-    s <- waitReply
-    let userOk = False
-    s <- getElementById "errorBox"
-    alert $ s
-    if pwOk && userOk
-        then return True
-        else return False
-
-waitReply :: Fay String
-waitReply = do
-    st <- getElementById "joinStatus"
-    if null (elementValue st)
-        then waitReply
-        else return (elementValue st)
+    if pwOk
+        then registerUser usr
+        else return ()
 
 validatePasswd :: Element -> Element -> Element -> Fay Bool
 validatePasswd e0 e1 msgBox = do
@@ -73,17 +61,20 @@ validatePasswd e0 e1 msgBox = do
                 return False
             | otherwise = return True
 
-registerUser :: User -> Element -> Fay ()
-registerUser u msgBox = do
+registerUser :: User -> Fay ()
+registerUser u = do
+    jForm       <- getElementById "joinForm"
+    errorBox       <- getElementById "errorBox"
     conn <- newWebSocket "ws://localhost:8080"
     addEventListener conn "onopen" $ \_ -> do
         conn `send` "new thug"
         conn `send` show u
     addEventListener conn "onmessage" $ \e -> do
         let m = messageData e
-        setInnerHTML msgBox m
-        st <- getElementById "errorBox"
-        setInnerHTML st "foop"
+        if m == "ok"
+            then submit jForm
+            else setInnerHTML errorBox m
+
 
 createElement :: String -> Fay Element
 createElement = ffi "document.createElement(%1)"
@@ -133,3 +124,11 @@ messageData = ffi "%1.data"
 alert :: String -> Fay ()
 alert = ffi "alert(%1)"
 
+sessionSet :: String -> String -> Fay ()
+sessionSet = ffi "sessionStorage.setItem(%1, %2)"
+
+sessionGet :: String -> Fay String
+sessionGet = ffi "sessionStorage.getItem(%1)"
+
+submit :: Element -> Fay ()
+submit = ffi "%1.submit()"

@@ -34,7 +34,7 @@ joinForm :: Html
 joinForm = form
     ! action "join"
     ! method "POST"
-    ! onsubmit "return Strict.Thug.validateJoin(true).value"
+    -- ! onsubmit "return Strict.Thug.validateJoin(true).value"
     ! id "joinForm" $
     table ! class_ "table table-hover" $ do
         tr $ do
@@ -85,6 +85,7 @@ joinForm = form
         tr $ do
             td mempty
             td $ button
-                ! type_ "submit"
+                ! type_ "button"
+                ! onclick "Strict.Thug.validateJoin(true)"
                 ! class_ "btn btn-success" $ "Register"
 

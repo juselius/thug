@@ -12,6 +12,7 @@ module Model.Members (
     , addMember
     , getMemberByEmail
     , getMembers
+    , hasMember
     , Member(..)
     ) where
 import Prelude as P
@@ -20,15 +21,11 @@ import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger
 import Data.Text
 import Data.Time
+import Data.Maybe
 import Database.Persist hiding ((==.))
 import Database.Persist.Sqlite (runSqlite)
 
 import Model.Tables
-
-type FirstName = Text
-type LastName  = Text
-type EmailAddr = Text
-type Passwd    = Text
 
 addStaticMembers :: IO ()
 addStaticMembers = runSqlite db $ do
@@ -38,10 +35,11 @@ addStaticMembers = runSqlite db $ do
           Member "Jonas" "Juselius" "jonas.juselius@uit.no" "secret" now
         ]
 
-addMember :: FirstName -> LastName -> EmailAddr -> Passwd -> IO ()
-addMember f l e p = runSqlite db $ do
+addMember :: Member -> IO ()
+addMember m = runSqlite db $ do
     now <- liftIO getCurrentTime
-    void $ insert (Member f l e p now)
+    void $ insert m { memberJoined = now }
+    liftIO $ print $ m { memberJoined = now }
 
 getMembers :: IO [Member]
 getMembers = runSqlite db $ do
@@ -55,3 +53,7 @@ getMemberByEmail e = runSqlite db $ do
         Just (Entity _ x) -> return $ Just x
         Nothing           -> return Nothing
 
+hasMember :: Member -> IO Bool
+hasMember m =
+    maybe (return False) (const (return True)) =<<
+    getMemberByEmail (memberEmail m)
