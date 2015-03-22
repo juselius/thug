@@ -1,13 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module View.Join (
-      joinView
-    , joinHandler
-    ) where
+module View.Join where
 
 import Prelude hiding (div, head, id)
 import Data.Monoid (mempty)
-import Text.Blaze (customAttribute)
 import Text.Blaze.Html
 import Text.Blaze.Html5 (a, div, h1, h2, h3, nav, li, link, p, ul,
                         (!), title, form, input, button, table, tr, td)
@@ -20,7 +16,6 @@ import Data.Aeson (object, (.=))
 import qualified Data.Text as T
 
 import View.Bootstrap
-import Controller.Join
 
 joinView :: ActionM()
 joinView = blaze . bootstrap (cssStarter "join thug") $ do
@@ -86,7 +81,7 @@ joinForm = form
                           ! required "true"
                           ! id "joinPasswd_"
                           ! class_ "form-control"
-                tr. td $ div ! id "errorBox" $ mempty
+                tr . td $ div ! id "errorBox" $ mempty
         tr $ do
             td mempty
             td $ button
