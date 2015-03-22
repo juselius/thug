@@ -57,24 +57,27 @@ navbar = nav ! class_ "navbar navbar-inverse navbar-fixed-top" $
                         span ! class_ "icon-bar" $ mempty
                         span ! class_ "icon-bar" $ mempty
                         span ! class_ "icon-bar" $ mempty
-            a ! class_ "navbar-brand" ! href "#about"   $ "about"
-            a ! class_ "navbar-brand" ! href "#contact" $ "contact"
+            a ! class_ "navbar-brand" ! href "/home#about"   $ "about"
+            a ! class_ "navbar-brand" ! href "/home#contact" $ "contact"
             a ! class_ "navbar-brand" ! href "/members" $ "members"
             a ! class_ "navbar-brand" ! href "/events"  $ "events"
-        div ! id "navbar"
-            ! class_ "navbar-collapse collapse" $
-            div ! class_ "container" $
-                form ! class_ "navbar-form navbar-right" $ do
-                    div ! class_ "form-group" $
-                        input   ! type_ "text"
-                                ! placeholder "Email"
-                                ! class_ "form-control"
-                    div ! class_ "form-group" $
-                        input   ! type_ "password"
-                                ! placeholder "Password"
-                                ! class_ "form-control"
-                    button  ! type_ "submit"
-                            ! class_ "btn btn-success" $ "Sign in"
+        -- loginbar
+
+loginbar :: Html
+loginbar = div ! id "navbar"
+    ! class_ "navbar-collapse collapse" $
+    div ! class_ "container" $
+        form ! class_ "navbar-form navbar-right" $ do
+            div ! class_ "form-group" $
+                input   ! type_ "text"
+                        ! placeholder "Email"
+                        ! class_ "form-control"
+            div ! class_ "form-group" $
+                input   ! type_ "password"
+                        ! placeholder "Password"
+                        ! class_ "form-control"
+            button  ! type_ "submit"
+                    ! class_ "btn btn-success" $ "Sign in"
 
 detailsButton :: AttributeValue -> Html
 detailsButton dest = p $ a
