@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings  #-}
 {-# LANGUAGE EmptyDataDecls  #-}
-{-# LANGUAGE EmptyDataDecls  #-}
 
 module Thug (
       validateJoin
@@ -19,15 +18,16 @@ instance Eventable Element
 
 validateJoin :: a -> Fay Bool
 validateJoin _ = do
-    jForm    <- getElementById "joinForm"
-    jEmail   <- getElementById "joinEmail"
-    jName    <- getElementById "joinName"
-    jPasswd  <- getElementById "joinPasswd"
-    jPasswd_ <- getElementById "joinPasswd_"
-    errorBox <- getElementById "errorBox"
+    jForm       <- getElementById "joinForm"
+    jEmail      <- getElementById "joinEmail"
+    jFirstName  <- getElementById "joinFirstName"
+    jLastName   <- getElementById "joinLastName"
+    jPasswd     <- getElementById "joinPasswd"
+    jPasswd_    <- getElementById "joinPasswd_"
+    errorBox    <- getElementById "errorBox"
 
     pwOk <- validatePasswd jPasswd jPasswd_ errorBox
-    userOk <- validateUser jName jEmail errorBox
+    userOk <- validateUser jFirstName jLastName jEmail errorBox
     if pwOk && userOk
         then return True
         else return False
@@ -40,21 +40,21 @@ validatePasswd e0 e1 msgBox = do
     where
         sane p0 p1 msgBox
             | p0 /= p1 = do
-                setInnerHTML msgBox $ "<b>Passwords don't match!</b>"
+                setInnerHTML msgBox "<b>Passwords don't match!</b>"
                 return False
             | length p0 < 8 = do
-                setInnerHTML msgBox $ "<b>Password is too short!</b>"
+                setInnerHTML msgBox "<b>Password is too short!</b>"
                 return False
             | otherwise = return True
 
-validateUser ::  Element -> Element -> Element -> Fay Bool
-validateUser u e msgBox = do
-    let user = elementValue u
+validateUser ::  Element -> Element -> Element -> Element -> Fay Bool
+validateUser f l e msgBox = do
+    let fname = elementValue f
+    let lname = elementValue l
     let email = elementValue e
-    setInnerHTML msgBox $ "<b>socket!</b>"
+    setInnerHTML msgBox "<b>socket!</b>"
     conn <- newWebSocket "ws://localhost:8080"
     return False
-
 
     -- addEventListener connectionToSanta "onopen" $ \_ -> do
     --     setDisabled prompt False

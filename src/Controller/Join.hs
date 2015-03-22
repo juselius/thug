@@ -22,10 +22,12 @@ import View.Bootstrap
 
 joinHandler :: ActionM()
 joinHandler = do
-    fullname <- param "fullname" :: ActionM String
-    email    <- param "email"    :: ActionM String
-    passwd  <- param "passwd"  :: ActionM String
-    passwd_  <- param "passwd_"  :: ActionM String
+    firstname <- param "firstname" :: ActionM String
+    lastname  <- param "lastname" :: ActionM String
+    email     <- param "email"     :: ActionM String
+    passwd    <- param "passwd"    :: ActionM String
+    passwd_   <- param "passwd_"   :: ActionM String
+    let fullname = firstname ++ " " ++ lastname
     if passwd /= passwd_
         then do
             page $ p "Passwords don't match!"
@@ -43,7 +45,7 @@ joinHandler = do
                         div ! class_ "starter-template" $ x
 
 joinHandlerJson :: ActionM()
-joinHandlerJson = do
+joinHandlerJson =
     -- join <- liftIO (registerInterest email)
     -- case registered of
         -- Just errorMessage -> do

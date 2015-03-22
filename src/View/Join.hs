@@ -43,13 +43,22 @@ joinForm = form
     ! id "joinForm" $
     table ! class_ "table table-hover" $ do
         tr $ do
-            td "full name"
+            td "first name"
             td $ div ! class_ "form-group" $
                 input ! type_ "text"
-                      ! placeholder "Name"
-                      ! name "fullname"
+                      ! placeholder "First name"
+                      ! name "firstname"
                       ! required "true"
-                      ! id "joinName"
+                      ! id "joinFirstName"
+                      ! class_ "form-control"
+        tr $ do
+            td "last name"
+            td $ div ! class_ "form-group" $
+                input ! type_ "text"
+                      ! placeholder "Last name"
+                      ! name "lastname"
+                      ! required "true"
+                      ! id "joinLastName"
                       ! class_ "form-control"
         tr $ do
             td "email"
