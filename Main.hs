@@ -16,7 +16,9 @@ import View.Join
 import View.Members
 import View.Events
 import Model.Thug
+import Controller.Join
 
+main :: IO ()
 main = do
     oldDb <- fileExist dbName
     migrateDb
@@ -25,8 +27,6 @@ main = do
         else do
             addStaticMembers
             addStaticEvents
-    Just m <- getMemberByEmail "jonas.juselius@uit.no"
-    print m
     void . forkIO $ runServer "127.0.0.1" 8080 wsHandler
     scotty 3000 $ do
         middleware . staticPolicy $ addBase "static"
@@ -42,6 +42,9 @@ main = do
 wsHandler :: ServerApp
 wsHandler client = do
     conn <- acceptRequest client
-    msg <- receiveData conn :: IO Text
-    print msg
+    msg <- receiveDataMessage conn
+    putStrLn $ "request:" ++ show msg
+    msg' <- receiveDataMessage conn
+    putStrLn $ "   data:" ++ show msg'
+    sendTextData conn ("hello, hello thug" :: Text)
 
