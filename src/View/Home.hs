@@ -24,7 +24,7 @@ coverView = blaze . bootstrap (cssCover "thug") $
                         h3 ! class_ "masthead-brand" $ "thug"
                         nav $ ul ! class_ "nav masthead-nav" $ do
                             li ! class_ "active" $ a ! href "/home" $ "home"
-                            li $ a ! href "/contact" $ "contact"
+                            li $ a ! href "/events" $ "events"
                             li $ a ! href "/join" $ "join"
                 div ! class_ "inner cover" $ do
                     h1 ! class_ "cover-heading" $ "tromsø haskell users group"
