@@ -9,13 +9,18 @@ import Network.WebSockets
 import Control.Concurrent
 import Control.Monad
 import Data.Text
+import System.Posix.Files (fileExist)
 
 import View.Home
 import View.Join
 import Model.Members
 
 main = do
+    oldDb <- fileExist dbName
     migrateDb
+    if oldDb then return () else addStaticData
+    Just m <- getMemberByEmail "jonas.juselius@uit.no"
+    print m
     void . forkIO $ runServer "127.0.0.1" 8080 wsHandler
     scotty 3000 $ do
         middleware . staticPolicy $ addBase "static"
